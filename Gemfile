@@ -1,0 +1,15 @@
+source 'https://rubygems.org'
+
+# gem 'capybara'
+# gem 'chromedriver-helper'
+# gem 'cucumber'
+# gem 'selenium-webdriver'
+# # gem 'test-unit'
+# # gem 'test-unit-capybara'
+# gem 'allure-cucumber'
+# gem 'allure-rspec'
+
+gem 'rspec', '~> 3.8'
+gem 'watir', '~> 6.16', '>= 6.16.5'
+gem 'cucumber', '~> 3.1', '>= 3.1.2'
+gem 'allure-cucumber'

@@ -1,0 +1,1 @@
+cucumber --format AllureCucumber::Formatter --out allure-results & allure serve
