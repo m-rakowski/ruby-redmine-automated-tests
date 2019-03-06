@@ -1,7 +1,7 @@
 Feature: Registration
 
-  In order to have an account in Redmine
-  As a user
+  In order to have an account in Redmine<br/>
+  As a user<br/>
   I should be able to register an account
 
   Background:

@@ -1,7 +1,7 @@
 Feature: Login
 
-  In order to be able to use Redmine
-  As a user
+  In order to be able to use Redmine<br/>
+  As a user<br/>
   I should be able to log in
 
   Background:
@@ -16,8 +16,3 @@ Feature: Login
     Given incorrect user credentials
     When user logs in
     Then user did not log in
-
-  Scenario: Purposely failing test to see if screenshot is added as attachment
-    Given a user which does not exist
-    When user logs in
-    Then user logged in successfully

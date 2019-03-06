@@ -25,3 +25,9 @@ After do |scenario|
 
   @browser.close
 end
+
+# AfterStep do |scenario|
+#   screenshot = "allure-results\\" + DateTime.now.strftime('%Q').to_s + '.png'
+#   @browser.screenshot.save (screenshot)
+#   attach_file(screenshot, File.open(screenshot))
+# end

@@ -1,6 +1,6 @@
 Feature: Delete test users
 
-  In order to be able to run registration tests
+  In order to be able to run registration tests<br/>
   Attempt to delete those test users which have already been created
 
   Background:
@@ -18,6 +18,6 @@ Feature: Delete test users
       | TestUser3   | TestUser3Password  |
       | TestUser4   | TestUser4Password  |
 
-    Scenario: Reset user generator counter
-      When user counter generator is reset
-      Then user counter file content is "0"
+  Scenario: Reset user generator counter
+    When user counter generator is reset
+    Then file contents are "0"
