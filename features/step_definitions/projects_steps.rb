@@ -1,6 +1,8 @@
+include AllureCucumber::DSL
+
 Given(/^user logged in$/) do
-  @username = 'TestUser1'
-  @password = 'TestUser1Password'
+  @username = 'UserWhichExists'
+  @password = 'Password'
 
   @browser.goto 'http://demo.redmine.org/login'
   expect(@browser.text).to include 'Login:'
@@ -32,4 +34,32 @@ end
 
 Then(/^project gets created successfully$/) do
   expect(@browser.div(id: "flash_notice").text).to include 'Successful creation.'
+end
+
+Given(/^a project which exists$/) do
+  @project_identifier = 'projectname4dfa3mx6t2'
+end
+
+When(/^closes the project$/) do
+  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier;
+  @browser.a(class: 'icon-lock').click
+
+  @browser.alert.ok
+end
+
+Then(/^the project becomes read-only$/) do
+  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier + '/issues/new'
+  expect(@browser.div(id: "errorExplanation").text).to include 'You are not authorized to access this page.'
+end
+
+When(/^reopens the project$/) do
+  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier;
+  @browser.a(class: 'icon-unlock').click
+
+  @browser.alert.ok
+end
+
+Then(/^new issues can be added to the project$/) do
+  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier + '/issues/new'
+  expect(@browser.element(id: "errorExplanation")).not_to be_present
 end

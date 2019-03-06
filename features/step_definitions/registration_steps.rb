@@ -43,3 +43,15 @@ end
 Then(/^user will not be registered$/) do
   expect(@browser.div(id: "errorExplanation")).to be_visible
 end
+
+Given(/^a new user "([^"]*)" with password "([^"]*)"$/) do |username, password|
+  @username = username
+  @password = password
+  @firstname = username + "FirstName"
+  @lastname = username + "LastName"
+  @email = 'testuser' + username + '@test.org'
+end
+
+Then(/^logout$/) do
+  @browser.close
+end
