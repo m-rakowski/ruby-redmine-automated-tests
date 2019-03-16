@@ -13,6 +13,6 @@ Feature: Login
     Then user logged in successfully
 
   Scenario: Logging in with incorrect credentials
-    Given incorrect user credentials
+    Given a user which does not exist
     When user logs in
     Then user did not log in

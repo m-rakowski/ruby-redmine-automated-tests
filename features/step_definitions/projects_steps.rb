@@ -1,20 +1,5 @@
 include AllureCucumber::DSL
 
-Given(/^user logged in$/) do
-  @username = 'UserWhichExists'
-  @password = 'Password'
-
-  @browser.goto 'http://demo.redmine.org/login'
-  expect(@browser.text).to include 'Login:'
-
-  @browser.text_field(id: 'username').set @username
-  @browser.text_field(id: 'password').set @password
-
-  @browser.button(name: 'login').click
-
-  expect(@browser.text).to include 'Logged in as ' + @username
-end
-
 And(/^a project which does not yet exist$/) do
   @project_name = 'project' + DateTime.now.strftime('%Q').to_s
   @project_description = 'description ' + DateTime.now.strftime('%Q').to_s
@@ -36,11 +21,11 @@ Then(/^project gets created successfully$/) do
   expect(@browser.div(id: "flash_notice").text).to include 'Successful creation.'
 end
 
-Given(/^a project which exists$/) do
-  @project_identifier = 'projectname4dfa3mx6t2'
+Given(/^a project with id (.*) which exists$/) do |project_id|
+  @project_identifier = project_id
 end
 
-When(/^closes the project$/) do
+When(/^closing the project$/) do
   @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier;
   @browser.a(class: 'icon-lock').click
 
@@ -49,11 +34,11 @@ end
 
 Then(/^the project becomes read-only$/) do
   @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier + '/issues/new'
-  expect(@browser.div(id: "errorExplanation").text).to include 'You are not authorized to access this page.'
+  expect(@browser.element(id: "errorExplanation").text).to include 'You are not authorized to access this page.'
 end
 
 When(/^reopens the project$/) do
-  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier;
+  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier
   @browser.a(class: 'icon-unlock').click
 
   @browser.alert.ok
@@ -62,4 +47,19 @@ end
 Then(/^new issues can be added to the project$/) do
   @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier + '/issues/new'
   expect(@browser.element(id: "errorExplanation")).not_to be_present
+end
+
+When(/^creating a private project with name "([^"]*)" \(if it does not exists yet\)$/) do |projectName|
+
+  @project_identifier = "id_" + projectName
+
+  @browser.goto 'http://demo.redmine.org/projects/new'
+  @browser.text_field(id: 'project_name').set(projectName)
+  @browser.textarea(id: 'project_description').set(projectName)
+  @browser.text_field(id: 'project_identifier').set("id_" + projectName)
+
+  @browser.checkbox(:id => 'project_is_public').uncheck
+
+  @browser.button(name: 'commit').click
+
 end
