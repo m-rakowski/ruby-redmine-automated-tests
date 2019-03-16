@@ -7,9 +7,18 @@ Given("login page open") do
   expect(@browser.text).to include 'Login:'
 end
 
+Given(/^logged in as "([^"]*)" with password "([^"]*)"$/) do |username, password|
+
+  @browser.goto 'http://demo.redmine.org/login'
+  @browser.text_field(id: 'username').set username
+  @browser.text_field(id: 'password').set password
+
+  @browser.button(name: 'login').click
+end
+
 Given("a user which exists") do
-  @username = 'TestUser1'
-  @password = 'TestUser1Password'
+  @username = 'UserWhichExists'
+  @password = 'Password'
 end
 
 Given("a user which does not exist") do
@@ -25,15 +34,11 @@ When("user logs in") do
 end
 
 Then("user logged in successfully") do
-  expect(@browser.text).to include 'Logged in as TestUser1'
+  expect(@browser.text).to include 'Logged in as ' + @username
 end
 
-Given("incorrect user credentials") do
-  @username = 'TestUser1'
-  @password = 'TestUser1Password1'
-end
 
 Then("user did not log in") do
   expect(@browser.text).to include 'Invalid user or password'
-  expect(@browser.text).not_to include 'Logged in as TestUser1'
+  expect(@browser.text).not_to include 'Logged in as '+@username
 end

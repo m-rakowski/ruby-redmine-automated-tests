@@ -1,11 +1,5 @@
 include AllureCucumber::DSL
 
-Given(/^logged in as "([^"]*)" with password "([^"]*)"$/) do |username, password|
-  @browser.text_field(id: 'username').set username
-  @browser.text_field(id: 'password').set password
-
-  @browser.button(name: 'login').click
-end
 
 When(/^deleting account$/) do
   @browser.goto 'http://demo.redmine.org/my/account/destroy'
