@@ -3,13 +3,13 @@ require 'date'
 include AllureCucumber::DSL
 
 Given("login page open") do
-  @browser.goto 'http://demo.redmine.org/login'
+  @browser.goto 'http://127.0.0.1:80/login'
   expect(@browser.text).to include 'Login:'
 end
 
 Given(/^logged in as "([^"]*)" with password "([^"]*)"$/) do |username, password|
 
-  @browser.goto 'http://demo.redmine.org/login'
+  @browser.goto 'http://127.0.0.1:80/login'
   @browser.text_field(id: 'username').set username
   @browser.text_field(id: 'password').set password
 
