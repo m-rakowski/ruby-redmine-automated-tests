@@ -20,12 +20,12 @@ Feature: Test setup
 
   Scenario: Creating a project to be closed later on
     Given I am logged in as "UserWhichExists" with password "Password"
-    When creating a private project with name "project_to_be_closed" (if it does not exists yet)
-    And reopens the project
+    When creating a private project with name "project_to_be_closed" if it does not exist yet
+    And reopening the project if closed
     Then logout
 
   Scenario: Creating a project and closing it right away (to be reopened later on)
     Given I am logged in as "UserWhichExists" with password "Password"
-    When creating a private project with name "project_to_be_reopened" (if it does not exists yet)
-    And closing the project
+    When creating a private project with name "project_to_be_reopened" if it does not exist yet
+    And closing the project if open
     Then logout

@@ -8,7 +8,7 @@ end
 
 When(/^user tries to create the project$/) do
 
-  @browser.goto 'http://demo.redmine.org/projects/new'
+  @browser.goto 'http://127.0.0.1:80/projects/new'
 
   @browser.text_field(id: 'project_name').set @project_name
   @browser.textarea(id: 'project_description').set @project_description
@@ -26,34 +26,73 @@ Given(/^a project with id (.*) which exists$/) do |project_id|
 end
 
 When(/^closing the project$/) do
-  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier;
+  @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier;
+
   @browser.a(class: 'icon-lock').click
 
+  Watir::Wait.until {@browser.alert.exists?}
   @browser.alert.ok
+
+  @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier;
+  expect(@browser.a(class: 'icon-unlock')).to be_visible
+end
+
+When(/^closing the project if open$/) do
+  @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier;
+
+  if (@browser.a(class: 'icon-lock').exists?)
+    @browser.a(class: 'icon-lock').click
+
+    Watir::Wait.until {@browser.alert.exists?}
+    @browser.alert.ok
+
+    @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier;
+    expect(@browser.a(class: 'icon-unlock')).to be_visible
+  end
 end
 
 Then(/^the project becomes read-only$/) do
-  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier + '/issues/new'
+  @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier + '/issues/new'
   expect(@browser.element(id: "errorExplanation").text).to include 'You are not authorized to access this page.'
 end
 
 When(/^reopens the project$/) do
-  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier
+  @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier
+
   @browser.a(class: 'icon-unlock').click
 
+  Watir::Wait.until {@browser.alert.exists?}
   @browser.alert.ok
+
+  @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier;
+  expect(@browser.a(class: 'icon-lock')).to be_visible
+end
+
+
+When(/^reopening the project if closed$/) do
+  @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier
+
+  if (@browser.a(class: 'icon-unlock').exists?)
+    @browser.a(class: 'icon-unlock').click
+
+    Watir::Wait.until {@browser.alert.exists?}
+    @browser.alert.ok
+
+    @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier;
+    expect(@browser.a(class: 'icon-lock')).to be_visible
+  end
 end
 
 Then(/^new issues can be added to the project$/) do
-  @browser.goto 'http://demo.redmine.org/projects/' + @project_identifier + '/issues/new'
+  @browser.goto 'http://127.0.0.1:80/projects/' + @project_identifier + '/issues/new'
   expect(@browser.element(id: "errorExplanation")).not_to be_present
 end
 
-When(/^creating a private project with name "([^"]*)" \(if it does not exists yet\)$/) do |projectName|
+When(/^creating a private project with name "([^"]*)" if it does not exist yet$/) do |projectName|
 
   @project_identifier = "id_" + projectName
 
-  @browser.goto 'http://demo.redmine.org/projects/new'
+  @browser.goto 'http://127.0.0.1:80/projects/new'
   @browser.text_field(id: 'project_name').set(projectName)
   @browser.textarea(id: 'project_description').set(projectName)
   @browser.text_field(id: 'project_identifier').set("id_" + projectName)

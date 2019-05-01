@@ -2,7 +2,7 @@ include AllureCucumber::DSL
 
 
 When(/^deleting account$/) do
-  @browser.goto 'http://demo.redmine.org/my/account/destroy'
+  @browser.goto 'http://127.0.0.1:80/my/account/destroy'
   expect(@browser.text).to include 'Your account will be permanently deleted, with no way to reactivate it.'
 
   @browser.checkbox(:id => 'confirm').set

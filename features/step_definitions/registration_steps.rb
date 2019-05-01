@@ -1,7 +1,7 @@
 include AllureCucumber::DSL
 
 Given(/^signup page open$/) do
-  @browser.goto 'http://demo.redmine.org/account/register'
+  @browser.goto 'http://127.0.0.1:80/account/register'
   expect(@browser.text).to include 'Register'
 end
 
