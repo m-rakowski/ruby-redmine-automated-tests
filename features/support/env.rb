@@ -1,5 +1,7 @@
 require 'watir'
 require 'allure-cucumber'
+require "selenium-webdriver"
+
 include AllureCucumber::DSL
 
 class Cucumber::Core::Test::Step
@@ -11,13 +13,19 @@ class Cucumber::Core::Test::Step
 end
 
 Before do
+
   Watir.default_timeout = 6
 
+  Selenium::WebDriver.logger.level = :debug
 
   browser_type = ENV['BROWSER_TYPE']
   browser_type = 'chrome' if browser_type.nil?
 
-  @browser = Watir::Browser.new browser_type.to_sym
+  if browser_type == 'ie'
+    @browser = Watir::Browser.new :ie, options: {native_events: false}
+  else
+    @browser = Watir::Browser.new browser_type.to_sym
+  end
 
   @browser.window.maximize
 end
@@ -36,9 +44,3 @@ After do |scenario|
   end
 
 end
-
-# AfterStep do |scenario|
-#   screenshot = "allure-results\\" + DateTime.now.strftime('%Q').to_s + '.png'
-#   @browser.screenshot.save (screenshot)
-#   attach_file(screenshot, File.open(screenshot))
-# end

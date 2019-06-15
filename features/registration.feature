@@ -1,3 +1,4 @@
+@registration
 Feature: Registration
 
   In order to have an account in Redmine<br/>

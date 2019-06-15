@@ -1,3 +1,4 @@
+@projects
 Feature: Projects
 
   Scenario: Creating a new project
