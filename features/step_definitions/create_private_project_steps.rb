@@ -5,28 +5,17 @@ include AllureCucumber::DSL
 
 Given("project exists") do
 
-  @time = Time.now.to_i.to_s
-
-  @browser.goto 'http://127.0.0.1:80/projects/new'
-  @browser.text_field(id: 'project_name').set("PrivateProject" + @time)
-  @browser.textarea(id: 'project_description').set("description " + @time)
-  @browser.text_field(id: 'project_identifier').set("id_" + @time)
-
-  @browser.checkbox(:id => 'project_is_public').uncheck
-
-  @browser.button(name: 'commit').click
-
-  @existingProject = "id_" + @time
+  @existingProject = "id_myveryprivateproject"
 end
 
 Given("issue exists") do
 
-  @browser.goto "http://127.0.0.1:80/projects/" + @existingProject + "/issues/new"
-  @browser.text_field(id: 'issue_subject').set('issue' + @time)
-  @browser.textarea(id: 'issue_description').set('description' + @time)
+  sleep 0.5 if @browser.driver.browser.eql? :internet_explorer;@browser.goto "http://localhost:10083/projects/" + @existingProject + "/issues/new"
+  @browser.text_field(id: 'issue_subject').send_keys('issue' + @time)
+  @browser.textarea(id: 'issue_description').send_keys('description' + @time)
   @browser.button(name: 'commit').click
 
-  expect(@browser.element(id: 'flash_notice').a.text).to include '#'
+  sleep 0.5 if @browser.driver.browser.eql? :internet_explorer;expect(@browser.element(id: 'flash_notice').a.text).to include '#'
 
   @issueId = @browser.element(id: 'flash_notice').a.text.gsub('#', '')
 
@@ -34,17 +23,20 @@ end
 
 When("I log {int} hours of time under issue") do |hours|
 
-  @browser.goto "http://127.0.0.1:80/issues/" + @issueId
+  sleep 0.5 if @browser.driver.browser.eql? :internet_explorer;@browser.goto "http://localhost:10083/issues/" + @issueId
 
   @browser.a(class: 'icon-time-add').click
-  @browser.text_field(id: 'time_entry_hours').set(hours)
-  @browser.select_list(id: 'time_entry_activity_id').select('Design')
+  @browser.text_field(id: 'time_entry_hours').send_keys(hours)
+
+  # @browser.select_list(id: 'time_entry_activity_id').option(index: 0).click
+  # @browser.select_list(id: 'time_entry_activity_id').select('time tracker')
+
   @browser.button(name: 'commit').click
 
 end
 
 Then("time is logged") do
-  @browser.goto "http://127.0.0.1:80/issues/" + @issueId
+  sleep 0.5 if @browser.driver.browser.eql? :internet_explorer;@browser.goto "http://localhost:10083/issues/" + @issueId
 
-  expect(@browser.td(class: 'spent-time').text).to include '1.00 hour'
+  sleep 0.5 if @browser.driver.browser.eql? :internet_explorer;expect(@browser.element(css: 'div.spent-time.attribute div.value').text).to include '1.00 h'
 end

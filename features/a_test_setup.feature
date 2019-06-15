@@ -29,3 +29,14 @@ Feature: Test setup
     When creating a private project with name "project_to_be_reopened" if it does not exist yet
     And closing the project if open
     Then logout
+
+  Scenario: Deleting the "PrivateProjectTest" project
+    Given I am logged in as "admin" with password "Password"
+    When I delete the private project if it exists
+    Then it is no longer displayed on the list of projects
+
+  Scenario: Deleting a file from wiki
+    Given I am logged in as "admin" with password "Password"
+    And private project wiki page is open
+    When I try to delete all files
+    Then there are no files on the wiki page

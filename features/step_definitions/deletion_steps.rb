@@ -2,8 +2,8 @@ include AllureCucumber::DSL
 
 
 When(/^deleting account$/) do
-  @browser.goto 'http://127.0.0.1:80/my/account/destroy'
-  expect(@browser.text).to include 'Your account will be permanently deleted, with no way to reactivate it.'
+  sleep 0.5 if @browser.driver.browser.eql? :internet_explorer;@browser.goto 'http://localhost:10083/my/account/destroy'
+  sleep 0.5 if @browser.driver.browser.eql? :internet_explorer;expect(@browser.text).to include 'Your account will be permanently deleted, with no way to reactivate it.'
 
   @browser.checkbox(:id => 'confirm').set
   @browser.button(name: 'commit').click
@@ -11,7 +11,7 @@ When(/^deleting account$/) do
 end
 
 Then(/^the account is deleted$/) do
-  expect(@browser.text).to include 'Your account has been permanently deleted.'
+  sleep 0.5 if @browser.driver.browser.eql? :internet_explorer;expect(@browser.text).to include 'Your account has been permanently deleted.'
 end
 
 When(/^user counter generator is reset$/) do
